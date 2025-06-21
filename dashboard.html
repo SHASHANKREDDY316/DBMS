@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BMW Showroom Dashboard</title>
+    <link rel="stylesheet" href="dashboard-style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #eaf6ff 0%, #dbeafe 100%);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #17223b;
+            margin: 0;
+            padding: 0 0 32px 0;
+            min-height: 100vh;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            padding: 28px 2vw 16px 2vw;
+            background: linear-gradient(to right, #eaf2fb 70%, #c9ddff 100%);
+            box-shadow: 0 2px 14px rgba(0,30,80,0.08);
+        }
+        .logo-area img {
+            width: 60px;
+            margin-right: 18px;
+            filter: drop-shadow(0 2px 8px #d7e7fa);
+        }
+        .logo-area h1 {
+            font-size: 2.1rem;
+            margin: 0;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 6px #e0eaff;
+        }
+        .global-search-bar {
+            margin: 30px auto 22px auto;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            max-width: 480px;
+            background: #fff;
+            border-radius: 16px;
+            padding: 16px 24px;
+            box-shadow: 0 2px 18px rgba(0,91,170,0.09);
+        }
+        .global-search-bar input {
+            padding: 11px 17px;
+            border-radius: 8px;
+            border: 1.5px solid #7bb7fa;
+            font-size: 1.15em;
+            min-width: 220px;
+            outline: none;
+            transition: border-color 0.2s;
+            background: #f5faff;
+        }
+        .global-search-bar input:focus {
+            border-color: #005baa;
+        }
+        .global-search-bar button {
+            background: linear-gradient(90deg, #005baa 60%, #007eea 100%);
+            color: #fff;
+            border: none;
+            border-radius: 7px;
+            padding: 10px 24px;
+            font-weight: 600;
+            font-size: 1.02em;
+            cursor: pointer;
+            transition: background 0.18s;
+            box-shadow: 0 1px 6px #b5d7ff33;
+        }
+        .global-search-bar button:last-child {
+            background: #dbeafe;
+            color: #005baa;
+            font-weight: 500;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+        nav button {
+            background: linear-gradient(90deg,#e4f0ff 60%, #c9e0ff 100%);
+            color: #005baa;
+            border: none;
+            border-radius: 9px 9px 0 0;
+            padding: 15px 38px;
+            font-size: 1.08em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.18s, color 0.18s;
+            box-shadow: 0 1px 9px #b5d7ff2a;
+        }
+        nav button.active {
+            background: linear-gradient(90deg,#005baa 60%, #007eea 100%);
+            color: #fff;
+            box-shadow: 0 4px 18px #005baa1c;
+            border-bottom: 4px solid #fff;
+        }
+        section {
+            display: none;
+            background: #fff;
+            border-radius: 0 0 18px 18px;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 36px 32px 38px 32px;
+            box-shadow: 0 8px 36px rgba(0,91,170,0.10);
+            min-height: 480px;
+        }
+        section.active {
+            display: block;
+            animation: fadeIn 0.26s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px);}
+            to { opacity: 1; transform: none;}
+        }
+        h2 {
+            color: #005baa;
+            font-size: 1.56em;
+            margin-bottom: 24px;
+            margin-top: 0;
+            letter-spacing: 0.6px;
+            font-weight: 800;
+            text-shadow: 0 1px 8px #e8f2ff;
+        }
+        .form-section {
+            margin-bottom: 18px;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .form-section form {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .form-section input, .form-section button {
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1.5px solid #7bb7fa;
+            font-size: 1.01em;
+            background: #f8fbff;
+        }
+        .form-section input {
+            min-width: 120px;
+        }
+        .form-section button {
+            background: linear-gradient(90deg, #005baa 60%, #007eea 100%);
+            color: #fff;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.18s;
+            box-shadow: 0 1px 6px #b5d7ff33;
+        }
+        .form-section button:hover {
+            background: linear-gradient(90deg, #00376c 60%, #005baa 100%);
+        }
+        .search-bar {
+            margin-bottom: 17px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        .search-bar input {
+            padding: 8px 14px;
+            border-radius: 7px;
+            border: 1.4px solid #7bb7fa;
+            font-size: 1.01em;
+            min-width: 170px;
+            outline: none;
+            background: #f5faff;
+            transition: border-color 0.2s;
+        }
+        .search-bar input:focus {
+            border-color: #005baa;
+        }
+        .search-bar button {
+            background: linear-gradient(90deg, #005baa 60%, #007eea 100%);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 9px 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.18s;
+        }
+        .search-bar button:last-child {
+            background: #e0e8f7;
+            color: #005baa;
+        }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 7px;
+            margin-top: 8px;
+            background: transparent;
+        }
+        th, td {
+            padding: 11px 14px;
+            text-align: left;
+        }
+        thead th {
+            background: linear-gradient(90deg, #eaf2ff 60%, #d2eaff 100%);
+            color: #005baa;
+            font-weight: 800;
+            font-size: 1.01em;
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 1px 4px #eaf6ff55;
+        }
+        tbody tr {
+            background: #fafdff;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 1px 5px rgba(0,91,170,0.07);
+        }
+        tbody td {
+            border-bottom: 1.5px solid #e3e9f1;
+            font-size: 1.01em;
+        }
+        .actions button {
+            background: linear-gradient(90deg, #ff4757 60%, #ff6f61 100%);
+            color: #fff;
+            border: none;
+            border-radius: 7px;
+            padding: 6px 16px;
+            font-size: 0.98em;
+            font-weight: 700;
+            cursor: pointer;
+            margin-right: 4px;
+            transition: background 0.21s;
+            box-shadow: 0 1px 6px #ffd7d7cc;
+        }
+        .actions button:hover {
+            background: linear-gradient(90deg, #c82333 60%, #ff4757 100%);
+        }
+        @media (max-width: 950px) {
+            .logo-area h1 { font-size: 1.22rem; }
+            section { padding: 20px 4vw; }
+            nav button { padding: 11px 17px; font-size: 0.99em; }
+            .global-search-bar { max-width: 97vw; }
+        }
+        @media (max-width: 650px) {
+            .logo-area { flex-direction: column; align-items: flex-start; padding: 14px 6vw 6px 6vw;}
+            .logo-area img { margin-bottom: 7px; }
+            nav { gap: 5px; flex-wrap: wrap; }
+            section { padding: 10px 2vw; min-height: 200px;}
+            .form-section form, .search-bar { flex-direction: column; align-items: stretch; gap: 6px;}
+            .form-section input, .form-section button, .search-bar input, .search-bar button { min-width: unset; width: 100%; }
+            table thead { font-size: 0.95em;}
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-area">
+        <a href="index.html" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg" alt="BMW Logo">
+            <h1><span style="color:#005baa;font-weight:800;font-family:sans-serif;">ssr</span> Showroom Management Dashboard</h1>
+        </a>
+    </div>
+    <div class="global-search-bar">
+        <input type="text" id="globalSearch" placeholder="Global Search... (across all tabs)">
+        <button type="button" onclick="globalSearch()">Search</button>
+        <button type="button" onclick="clearGlobalSearch()">Clear</button>
+    </div>
+    <nav>
+        <button type="button" onclick="showTab('cars')" id="tab-cars">Cars</button>
+        <button type="button" onclick="showTab('customers')" id="tab-customers">Customers</button>
+        <button type="button" onclick="showTab('staff')" id="tab-staff">Staff</button>
+        <button type="button" onclick="showTab('services')" id="tab-services">Services</button>
+        <button type="button" onclick="showTab('payments')" id="tab-payments">Payments</button>
+        <button type="button" onclick="showTab('sales')" id="tab-sales">Sales</button>
+    </nav>
+    <!-- Cars -->
+    <section id="cars" class="active">
+        <h2>Cars</h2>
+        <div class="form-section">
+            <form id="carForm" autocomplete="off">
+                <input type="text" id="carModel" placeholder="Model" required>
+                <input type="number" id="carYear" placeholder="Year" required>
+                <input type="number" id="carPrice" placeholder="Price" required>
+                <input type="text" id="carColor" placeholder="Color" required>
+                <input type="number" id="carStock" placeholder="Stock" required>
+                <button type="submit">Add Car</button>
+            </form>
+        </div>
+        <div class="search-bar">
+            <input type="text" id="carSearch" placeholder="Search by Model or Color">
+            <button type="button" onclick="searchCars()">Search</button>
+            <button type="button" onclick="clearCarSearch()">Clear</button>
+        </div>
+        <table id="carsTable">
+            <thead>
+                <tr>
+                    <th>ID</th><th>Model</th><th>Year</th><th>Price</th><th>Color</th><th>Stock</th><th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+    <!-- Customers -->
+    <section id="customers">
+        <h2>Customers</h2>
+        <div class="form-section">
+            <form id="customerForm" autocomplete="off">
+                <input type="text" id="custName" placeholder="Name" required>
+                <input type="email" id="custEmail" placeholder="Email" required>
+                <input type="text" id="custPhone" placeholder="Phone">
+                <input type="text" id="custAddress" placeholder="Address">
+                <button type="submit">Add Customer</button>
+            </form>
+        </div>
+        <div class="search-bar">
+            <input type="text" id="customerSearch" placeholder="Search by Name or Email">
+            <button type="button" onclick="searchCustomers()">Search</button>
+            <button type="button" onclick="clearCustomerSearch()">Clear</button>
+        </div>
+        <table id="customersTable">
+            <thead>
+                <tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Address</th><th>Actions</th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+    <!-- Staff -->
+    <section id="staff">
+        <h2>Staff</h2>
+        <div class="form-section">
+            <form id="staffForm" autocomplete="off">
+                <input type="text" id="staffName" placeholder="Name" required>
+                <input type="text" id="staffRole" placeholder="Role" required>
+                <input type="email" id="staffEmail" placeholder="Email">
+                <input type="text" id="staffPhone" placeholder="Phone">
+                <button type="submit">Add Staff</button>
+            </form>
+        </div>
+        <div class="search-bar">
+            <input type="text" id="staffSearch" placeholder="Search by Name or Role">
+            <button type="button" onclick="searchStaff()">Search</button>
+            <button type="button" onclick="clearStaffSearch()">Clear</button>
+        </div>
+        <table id="staffTable">
+            <thead>
+                <tr><th>ID</th><th>Name</th><th>Role</th><th>Email</th><th>Phone</th><th>Actions</th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+    <!-- Services -->
+    <section id="services">
+        <h2>Services</h2>
+        <div class="form-section">
+            <form id="serviceForm" autocomplete="off">
+                <input type="number" id="servCarID" placeholder="Car ID" required>
+                <input type="number" id="servCustomerID" placeholder="Customer ID" required>
+                <input type="date" id="servDate" required>
+                <input type="text" id="servDesc" placeholder="Description" required>
+                <input type="number" id="servCost" placeholder="Cost" required>
+                <button type="submit">Add Service</button>
+            </form>
+        </div>
+        <div class="search-bar">
+            <input type="text" id="serviceSearch" placeholder="Search by Description or CarID">
+            <button type="button" onclick="searchServices()">Search</button>
+            <button type="button" onclick="clearServiceSearch()">Clear</button>
+        </div>
+        <table id="servicesTable">
+            <thead>
+                <tr><th>ID</th><th>CarID</th><th>CustomerID</th><th>Date</th><th>Description</th><th>Cost</th><th>Actions</th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+    <!-- Payments -->
+    <section id="payments">
+        <h2>Payments</h2>
+        <div class="form-section">
+            <form id="paymentForm" autocomplete="off">
+                <input type="number" id="payCustomerID" placeholder="Customer ID" required>
+                <input type="number" id="payAmount" placeholder="Amount" required>
+                <input type="date" id="payDate" required>
+                <input type="text" id="payMethod" placeholder="Method" required>
+                <button type="submit">Add Payment</button>
+            </form>
+        </div>
+        <div class="search-bar">
+            <input type="text" id="paymentSearch" placeholder="Search by Method or CustomerID">
+            <button type="button" onclick="searchPayments()">Search</button>
+            <button type="button" onclick="clearPaymentSearch()">Clear</button>
+        </div>
+        <table id="paymentsTable">
+            <thead>
+                <tr><th>ID</th><th>CustomerID</th><th>Amount</th><th>Date</th><th>Method</th><th>Actions</th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+        <section id="sales">
+        <h2>Payments</h2>
+        <div class="form-section">
+            <form id="paymentForm" autocomplete="off">
+                <input type="number" id="payCustomerID" placeholder="Customer ID" required>
+                <input type="number" id="payAmount" placeholder="Amount" required>
+                <input type="date" id="payDate" required>
+                <input type="text" id="payMethod" placeholder="Method" required>
+                <button type="submit">Add Payment</button>
+            </form>
+        </div>
+        <div class="search-bar">
+            <input type="text" id="paymentSearch" placeholder="Search by Method or CustomerID">
+            <button type="button" onclick="searchPayments()">Search</button>
+            <button type="button" onclick="clearPaymentSearch()">Clear</button>
+        </div>
+        <table id="paymentsTable">
+            <thead>
+                <tr><th>ID</th><th>CustomerID</th><th>Amount</th><th>Date</th><th>Method</th><th>Actions</th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+<script>
+    // ---- API Endpoints ----
+    const carApi     = "http://127.0.0.1:5000/api/cars";
+    const custApi    = "http://127.0.0.1:5000/api/customers";
+    const staffApi   = "http://127.0.0.1:5000/api/employees";
+    const serviceApi = "http://127.0.0.1:5000/api/services";
+    const paymentApi = "http://127.0.0.1:5000/api/payments";
+
+    // ---- Tab switching ----
+    function showTab(tab) {
+        document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+        document.getElementById(tab).classList.add('active');
+        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+        document.getElementById('tab-' + tab).classList.add('active');
+    }
+
+    // ---- Cars ----
+    function loadCars() {
+        fetch(carApi)
+            .then(res => res.json())
+            .then(list => renderCars(list));
+    }
+    function renderCars(list) {
+        const tbody = document.querySelector('#carsTable tbody');
+        tbody.innerHTML = '';
+        list.forEach(car => {
+            tbody.innerHTML += `<tr>
+                <td>${car.CarID}</td>
+                <td>${car.Model}</td>
+                <td>${car.Year}</td>
+                <td>${car.Price}</td>
+                <td>${car.Color}</td>
+                <td>${car.Stock}</td>
+                <td class="actions">
+                    <button type="button" onclick="deleteCar(${car.CarID})">Delete</button>
+                </td>
+            </tr>`;
+        });
+    }
+    document.getElementById('carForm').onsubmit = function(e) {
+        e.preventDefault();
+        fetch(carApi, {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({
+                Model: carModel.value,
+                Year: carYear.value,
+                Price: carPrice.value,
+                Color: carColor.value,
+                Stock: carStock.value
+            })
+        }).then(loadCars);
+        this.reset();
+    }
+    function deleteCar(id) {
+        if(confirm('Delete this car?')) {
+            fetch(`${carApi}/${id}`, {method:'DELETE'}).then(loadCars);
+        }
+    }
+    function searchCars() {
+        const val = document.getElementById('carSearch').value.trim();
+        if (!val) { loadCars(); return; }
+        fetch(carApi)
+            .then(res => res.json())
+            .then(list => renderCars(list.filter(car =>
+                (car.Model && car.Model.toLowerCase().includes(val.toLowerCase())) ||
+                (car.Color && car.Color.toLowerCase().includes(val.toLowerCase()))
+            )));
+    }
+    function clearCarSearch() {
+        document.getElementById('carSearch').value = '';
+        loadCars();
+    }
+
+    // ---- Customers ----
+    function loadCustomers() {
+        fetch(custApi)
+            .then(res => res.json())
+            .then(list => renderCustomers(list));
+    }
+    function renderCustomers(list) {
+        const tbody = document.querySelector('#customersTable tbody');
+        tbody.innerHTML = '';
+        list.forEach(c => {
+            tbody.innerHTML += `<tr>
+                <td>${c.CustomerID}</td>
+                <td>${c.Name}</td>
+                <td>${c.Email}</td>
+                <td>${c.Phone||''}</td>
+                <td>${c.Address||''}</td>
+                <td class="actions">
+                    <button type="button" onclick="deleteCustomer(${c.CustomerID})">Delete</button>
+                </td>
+            </tr>`;
+        });
+    }
+    document.getElementById('customerForm').onsubmit = function(e) {
+        e.preventDefault();
+        fetch(custApi, {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({
+                Name: custName.value,
+                Email: custEmail.value,
+                Phone: custPhone.value,
+                Address: custAddress.value
+            })
+        }).then(loadCustomers);
+        this.reset();
+    }
+    function deleteCustomer(id) {
+        if(confirm('Delete this customer?')) {
+            fetch(`${custApi}/${id}`, {method:'DELETE'}).then(loadCustomers);
+        }
+    }
+    function searchCustomers() {
+        const val = document.getElementById('customerSearch').value.trim();
+        if (!val) { loadCustomers(); return; }
+        fetch(custApi)
+            .then(res => res.json())
+            .then(list => renderCustomers(list.filter(c =>
+                (c.Name && c.Name.toLowerCase().includes(val.toLowerCase())) ||
+                (c.Email && c.Email.toLowerCase().includes(val.toLowerCase()))
+            )));
+    }
+    function clearCustomerSearch() {
+        document.getElementById('customerSearch').value = '';
+        loadCustomers();
+    }
+
+    // ---- Staff ----
+    function loadStaff() {
+        fetch(staffApi)
+            .then(res => res.json())
+            .then(list => renderStaff(list));
+    }
+    function renderStaff(list) {
+        const tbody = document.querySelector('#staffTable tbody');
+        tbody.innerHTML = '';
+        list.forEach(s => {
+            tbody.innerHTML += `<tr>
+                <td>${s.EmployeeID}</td>
+                <td>${s.Name}</td>
+                <td>${s.Role}</td>
+                <td>${s.Email||''}</td>
+                <td>${s.Phone||''}</td>
+                <td class="actions">
+                    <button type="button" onclick="deleteStaff(${s.EmployeeID})">Delete</button>
+                </td>
+            </tr>`;
+        });
+    }
+    document.getElementById('staffForm').onsubmit = function(e) {
+        e.preventDefault();
+        fetch(staffApi, {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({
+                Name: staffName.value,
+                Role: staffRole.value,
+                Email: staffEmail.value,
+                Phone: staffPhone.value
+            })
+        }).then(loadStaff);
+        this.reset();
+    }
+    function deleteStaff(id) {
+        if(confirm('Delete this staff member?')) {
+            fetch(`${staffApi}/${id}`, {method:'DELETE'}).then(loadStaff);
+        }
+    }
+    function searchStaff() {
+        const val = document.getElementById('staffSearch').value.trim();
+        if (!val) { loadStaff(); return; }
+        fetch(staffApi)
+            .then(res => res.json())
+            .then(list => renderStaff(list.filter(s =>
+                (s.Name && s.Name.toLowerCase().includes(val.toLowerCase())) ||
+                (s.Role && s.Role.toLowerCase().includes(val.toLowerCase()))
+            )));
+    }
+    function clearStaffSearch() {
+        document.getElementById('staffSearch').value = '';
+        loadStaff();
+    }
+
+    // ---- Payments ----
+    function loadPayments() {
+        fetch(paymentApi)
+            .then(res => res.json())
+            .then(list => renderPayments(list));
+    }
+    function renderPayments(list) {
+        const tbody = document.querySelector('#paymentsTable tbody');
+        tbody.innerHTML = '';
+        list.forEach(p => {
+            tbody.innerHTML += `<tr>
+                <td>${p.PaymentID}</td>
+                <td>${p.CustomerID}</td>
+                <td>${p.Amount}</td>
+                <td>${p.Date}</td>
+                <td>${p.Method}</td>
+                <td class="actions">
+                    <button type="button" onclick="deletePayment(${p.PaymentID})">Delete</button>
+                </td>
+            </tr>`;
+        });
+    }
+    document.getElementById('paymentForm').onsubmit = function(e) {
+        e.preventDefault();
+        fetch(paymentApi, {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({
+                CustomerID: payCustomerID.value,
+                Amount: payAmount.value,
+                Date: payDate.value,
+                Method: payMethod.value
+            })
+        }).then(loadPayments);
+        this.reset();
+    }
+    function deletePayment(id) {
+        if(confirm('Delete this payment?')) {
+            fetch(`${paymentApi}/${id}`, {method:'DELETE'}).then(loadPayments);
+        }
+    }
+    function searchPayments() {
+        const val = document.getElementById('paymentSearch').value.trim();
+        if (!val) { loadPayments(); return; }
+        fetch(paymentApi)
+            .then(res => res.json())
+            .then(list => renderPayments(list.filter(p =>
+                (p.Method && p.Method.toLowerCase().includes(val.toLowerCase())) ||
+                (p.CustomerID && String(p.CustomerID).includes(val))
+            )));
+    }
+    function clearPaymentSearch() {
+        document.getElementById('paymentSearch').value = '';
+        loadPayments();
+    }
+
+    // ---- Services ----
+    function loadServices() {
+        fetch(serviceApi)
+            .then(res => res.json())
+            .then(list => renderServices(list));
+    }
+    function renderServices(list) {
+        const tbody = document.querySelector('#servicesTable tbody');
+        tbody.innerHTML = '';
+        list.forEach(sv => {
+            tbody.innerHTML += `<tr>
+                <td>${sv.ServiceID}</td>
+                <td>${sv.CarID || sv.Car || ''}</td>
+                <td>${sv.CustomerID || sv.Customer || ''}</td>
+                <td>${sv.ServiceDate || sv.Date || ''}</td>
+                <td>${sv.Description || ''}</td>
+                <td>${sv.Cost || ''}</td>
+                <td class="actions">
+                    <button type="button" onclick="deleteService(${sv.ServiceID})">Delete</button>
+                </td>
+            </tr>`;
+        });
+    }
+    document.getElementById('serviceForm').onsubmit = function(e) {
+        e.preventDefault();
+        fetch(serviceApi, {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({
+                CarID: servCarID.value,
+                CustomerID: servCustomerID.value,
+                ServiceDate: servDate.value,
+                Description: servDesc.value,
+                Cost: servCost.value
+            })
+        }).then(loadServices);
+        this.reset();
+    }
+    function deleteService(id) {
+        if(confirm('Delete this service?')) {
+            fetch(`${serviceApi}/${id}`, {method:'DELETE'}).then(loadServices);
+        }
+    }
+    function searchServices() {
+        const val = document.getElementById('serviceSearch').value.trim();
+        if (!val) { loadServices(); return; }
+        fetch(serviceApi)
+            .then(res => res.json())
+            .then(list => renderServices(list.filter(sv =>
+                (sv.Description && sv.Description.toLowerCase().includes(val.toLowerCase())) ||
+                (sv.CarID && String(sv.CarID).includes(val))
+            )));
+    }
+    function clearServiceSearch() {
+        document.getElementById('serviceSearch').value = '';
+        loadServices();
+    }
+
+    // ---- Global Search ----
+    function globalSearch() {
+        const val = document.getElementById('globalSearch').value.trim().toLowerCase();
+        if (!val) {
+            // Clear and reload all tables
+            loadCars(); loadCustomers(); loadStaff(); loadServices(); loadPayments();
+            return;
+        }
+        // Cars
+        fetch(carApi).then(res => res.json()).then(list => {
+            renderCars(list.filter(car =>
+                Object.values(car).some(v => v!=null && String(v).toLowerCase().includes(val))
+            ));
+        });
+        // Customers
+        fetch(custApi).then(res => res.json()).then(list => {
+            renderCustomers(list.filter(c =>
+                Object.values(c).some(v => v!=null && String(v).toLowerCase().includes(val))
+            ));
+        });
+        // Staff
+        fetch(staffApi).then(res => res.json()).then(list => {
+            renderStaff(list.filter(s =>
+                Object.values(s).some(v => v!=null && String(v).toLowerCase().includes(val))
+            ));
+        });
+        // Services
+        fetch(serviceApi).then(res => res.json()).then(list => {
+            renderServices(list.filter(sv =>
+                Object.values(sv).some(v => v!=null && String(v).toLowerCase().includes(val))
+            ));
+        });
+        // Payments
+        fetch(paymentApi).then(res => res.json()).then(list => {
+            renderPayments(list.filter(p =>
+                Object.values(p).some(v => v!=null && String(v).toLowerCase().includes(val))
+            ));
+        });
+    }
+    function clearGlobalSearch() {
+        document.getElementById('globalSearch').value = '';
+        loadCars(); loadCustomers(); loadStaff(); loadServices(); loadPayments();
+    }
+
+    // ---- Initial load ----
+    loadCars(); loadCustomers(); loadStaff(); loadServices(); loadPayments();
+    showTab('cars');
+</script>
+</body>
+</html>
